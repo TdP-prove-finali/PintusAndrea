@@ -4,17 +4,14 @@ import networkx as nx
 
 class Controller:
     def __init__(self, view, model):
-        # the view, with the graphical elements of the UI
         self._view = view
-        # the model, which implements the logic of the program and holds the data
         self._model = model
 
 
     def handleCreaGrafo(self,e):
-
         min = self._view._txtRangeTrofei.start_value
         max = self._view._txtRangeTrofei.end_value
-        # MODO SICURO
+
         try:
             limite = int(self._view._txtMaxBattaglie.value)
         except ValueError:
@@ -23,6 +20,9 @@ class Controller:
         n_nodi = len(grafo.nodes)
         n_archi= len(grafo.edges)
 
+        self._view._ddSeedCard.options.clear()
+        for n in grafo.nodes:
+            self._view._ddSeedCard.options.append(ft.dropdown.Option(n.card_name))
 
 
         self._view._txtNodi.value = n_nodi
@@ -30,7 +30,6 @@ class Controller:
         self._view.update_page()
 
     def handleAnalisi(self, e):
-        # 3. Qui stampiamo la CLASSIFICA solo su richiesta
         self._view.txt_result.controls.clear()
 
         try:
@@ -55,7 +54,7 @@ class Controller:
             self._view.update_page()
             return
 
-        # Recuperiamo il limite per il calcolo di N e il top-N per la stampa
+
         try:
             limite = int(self._view._txtMaxBattaglie.value)
             n_top = int(self._view._ddTopN.value)
@@ -101,19 +100,28 @@ class Controller:
 
         self._view.txt_result.controls.append(ft.Text(messaggio))
 
-        # 5. Refresh della pagina
         self._view.update_page()
 
+    def handleGeneraDeck(self, e):
 
-    def handleDettagli(self, e):
-        pass
+        seed_nome = self._view._ddSeedCard.value
+        profondita = int(self._view._sliderProfondita.value)
+        soglia = float(self._view._sliderSogliaPeso.value)
+        top_n = int(self._view._txtTopCandidati.value)
 
+        if not seed_nome: return
 
-    def handleGeneraDeck(self):
-        pass
+        seed_obj = next((n for n in self._model._graph.nodes if n.card_name == seed_nome), None)
 
-    def riempiTendine(self):
-        pass
+        lista_deck = self._model.get_candidati_deck(seed_obj, profondita, soglia, top_n)
+
+        self._view.txt_result.controls.clear()
+        for deck, score in lista_deck:
+            nomi = [c.card_name for c in deck]
+            self._view.txt_result.controls.append(ft.Text(f"Sinergia {score}: {', '.join(nomi)}"))
+
+        self._view.update_page()
+
 
 
 

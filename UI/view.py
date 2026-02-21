@@ -24,11 +24,11 @@ class View:
         )
         self._txtMaxBattaglie = ft.TextField(label="Max Battaglie", value="1000", border_color="cyan", width=150)
 
-        # Statistiche Grafo
+
         self._txtNodi = ft.Text("0", size=25, weight="bold", color="cyan")
         self._txtArchi = ft.Text("0", size=25, weight="bold", color="cyan")
 
-        # --- 2. Analisi Connettività e Classifiche ---
+
         self._ddTopN = ft.Dropdown(
             label="Visualizza Top-N",
             options=[ft.dropdown.Option(str(i)) for i in [5, 10, 20]],
@@ -37,17 +37,22 @@ class View:
         self._txtNumCompConnesse = ft.Text("0", size=25, weight="bold", color="orange")
         self._txtDimMaxComp = ft.Text("0", size=25, weight="bold", color="orange")
 
-        # --- 3. Generazione Guidata Deck (Ricorsione) ---
+
         self._ddSeedCard = ft.Dropdown(label="Carta Seed", border_color="orange", expand=True)
         self._sliderProfondita = ft.Slider(min=1, max=8, value=8, divisions=7, label="Profondità: {value}")
-        self._sliderSogliaPeso = ft.Slider(min=0, max=1, value=0.5, divisions=10, label="Soglia Peso: {value}")
+        self._sliderSogliaPeso = ft.Slider(
+            min=0.0,
+            max=3.0,
+            value=1.1,
+            divisions=6,
+            label="Sinergia (Lift): {value}"
+        )
         self._txtTopCandidati = ft.TextField(label="Top-N per passo", value="3", width=120)
 
-        # Area Risultati (ListView per i deck generati e le classifiche)
+
         self.txt_result = ft.ListView(expand=True, spacing=10, padding=10, auto_scroll=False)
 
     def load_interface(self):
-        # Header
         header = ft.Container(
             content=ft.Row([
                 ft.Icon(ft.icons.QUERY_STATS, color="cyan", size=35),
@@ -56,7 +61,7 @@ class View:
             margin=ft.margin.only(bottom=20)
         )
 
-        # Sidebar: Input e Controlli
+
         sidebar = ft.Container(
             width=380,
             bgcolor="#1a1f26",
@@ -95,7 +100,7 @@ class View:
             ], spacing=10, scroll=ft.ScrollMode.ADAPTIVE)
         )
 
-        # Griglia Statistiche Superiori
+
         stats_row = ft.Row([
             self._create_card("NODI", self._txtNodi),
             self._create_card("ARCHI", self._txtArchi),
@@ -103,7 +108,7 @@ class View:
             self._create_card("MAX COMP.", self._txtDimMaxComp),
         ], spacing=10)
 
-        # Pannello Risultati
+
         results_panel = ft.Container(
             expand=True,
             bgcolor="#1a1f26",
@@ -119,7 +124,7 @@ class View:
             ])
         )
 
-        # Layout finale
+
         self._page.add(
             header,
             ft.Row([
@@ -128,7 +133,6 @@ class View:
             ], expand=True)
         )
 
-        self._controller.riempiTendine()
         self._page.update()
 
     def _create_card(self, label, value_obj):
