@@ -11,7 +11,7 @@ class Controller:
 
     def handleCreaGrafo(self,e):
 
-        start_time = time.time()  # <--- INIZIO CRONOMETRO
+        start_time = time.time()
 
         min = self._view._txtRangeTrofei.start_value
         max = self._view._txtRangeTrofei.end_value
@@ -22,8 +22,8 @@ class Controller:
             limite = 1000
         grafo = self._model.buildGraph(min,max,limite)
 
-        end_time = time.time()  # <--- FINE CRONOMETRO
-        print(f"\n[TEST GRAFO] Battaglie: {limite} | Tempo: {end_time - start_time:.4f}s")  # <--- STAMPA RISULTATO
+        end_time = time.time()
+        print(f"\n[TEST GRAFO] Battaglie: {limite} | Tempo: {end_time - start_time:.4f}s")
 
         n_nodi = len(grafo.nodes)
         n_archi= len(grafo.edges)
@@ -111,7 +111,7 @@ class Controller:
         self._view.update_page()
 
     def handleGeneraDeck(self, e):
-        start_time = time.time()  # <--- INIZIO CRONOMETRO
+        start_time = time.time()
 
         seed_nome = self._view._ddSeedCard.value
         profondita = int(self._view._sliderProfondita.value)
@@ -124,8 +124,8 @@ class Controller:
 
         lista_deck = self._model.get_candidati_deck(seed_obj, profondita, soglia, top_n)
 
-        end_time = time.time()  # <--- FINE CRONOMETRO
-        print(f"[TEST RICORSIONE] Soglia: {soglia} | Tempo: {end_time - start_time:.4f}s")  # <--- STAMPA RISULTATO
+        end_time = time.time()
+        print(f"[TEST RICORSIONE] Soglia: {soglia} | Tempo: {end_time - start_time:.4f}s")
 
         self._view.txt_result.controls.clear()
         for deck, score in lista_deck:
