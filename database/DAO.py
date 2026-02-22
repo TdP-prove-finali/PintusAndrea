@@ -5,6 +5,7 @@ class DAO():
     def __init__(self):
         return
 
+
     def getAllNodes(min,max,limite):
         conn = DBConnect.get_connection()
         cursor = conn.cursor(dictionary=True)

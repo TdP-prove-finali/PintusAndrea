@@ -9,7 +9,6 @@ class Model:
         self._graph = nx.Graph()
         self._idMap = {}
 
-
     def buildGraph(self,min,max,limite):
         self._graph.clear()
         self._graph.add_nodes_from(DAO.getAllNodes(min,max,limite))
