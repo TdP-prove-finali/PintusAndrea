@@ -1,5 +1,6 @@
 import flet as ft
 import networkx as nx
+import time
 
 
 class Controller:
@@ -9,6 +10,9 @@ class Controller:
 
 
     def handleCreaGrafo(self,e):
+
+        start_time = time.time()  # <--- INIZIO CRONOMETRO
+
         min = self._view._txtRangeTrofei.start_value
         max = self._view._txtRangeTrofei.end_value
 
@@ -17,6 +21,10 @@ class Controller:
         except ValueError:
             limite = 1000
         grafo = self._model.buildGraph(min,max,limite)
+
+        end_time = time.time()  # <--- FINE CRONOMETRO
+        print(f"\n[TEST GRAFO] Battaglie: {limite} | Tempo: {end_time - start_time:.4f}s")  # <--- STAMPA RISULTATO
+
         n_nodi = len(grafo.nodes)
         n_archi= len(grafo.edges)
 
@@ -103,6 +111,7 @@ class Controller:
         self._view.update_page()
 
     def handleGeneraDeck(self, e):
+        start_time = time.time()  # <--- INIZIO CRONOMETRO
 
         seed_nome = self._view._ddSeedCard.value
         profondita = int(self._view._sliderProfondita.value)
@@ -114,6 +123,9 @@ class Controller:
         seed_obj = next((n for n in self._model._graph.nodes if n.card_name == seed_nome), None)
 
         lista_deck = self._model.get_candidati_deck(seed_obj, profondita, soglia, top_n)
+
+        end_time = time.time()  # <--- FINE CRONOMETRO
+        print(f"[TEST RICORSIONE] Soglia: {soglia} | Tempo: {end_time - start_time:.4f}s")  # <--- STAMPA RISULTATO
 
         self._view.txt_result.controls.clear()
         for deck, score in lista_deck:
